@@ -4,7 +4,10 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import {User} from "../models/User";
+import {ProfessorPage} from "../pages/professor/professor";
+import {StudentPage} from "../pages/student/student";
+import {DailyLecturesPage} from "../pages/daily-lectures/daily-lectures";
 
 @Component({
   templateUrl: 'app.html'
@@ -13,18 +16,32 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
+  currentUser: User;
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform,
+              public statusBar: StatusBar,
+              public splashScreen: SplashScreen) {
+
+    localStorage.removeItem('currentUser');
     this.initializeApp();
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
-    ];
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (this.currentUser != null) {
+      if (this.currentUser.usertype.typeName == 'professor') {
+        this.rootPage = ProfessorPage;
+      } else {
+        this.rootPage = StudentPage;
+      }
+    }
 
+    this.pages = [
+      { title: 'Home', component: this.rootPage },
+      { title: 'Daily Lectures', component: DailyLecturesPage },
+      { title: 'Chat List', component: null },
+      { title: 'Teaching List', component: null}
+    ];
   }
 
   initializeApp() {
@@ -40,5 +57,10 @@ export class MyApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+
+  logout() {
+    localStorage.removeItem('currentUser');
+    this.nav.setRoot(HomePage);
   }
 }

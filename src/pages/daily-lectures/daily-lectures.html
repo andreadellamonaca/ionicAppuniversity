@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Your Daily Lectures</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item-group>
+    <ion-card *ngFor="let l of lectures">
+      <br>
+      <h2>Teaching: {{ l.teaching.name }} ({{ l.teaching.cfu }})</h2>
+      <ion-item>Classroom: {{ l.classroom.name }}</ion-item>
+      <ion-item>Hour: {{ l.hour }}, Duration {{ l.duration }}</ion-item>
+      <ion-item></ion-item>
+    </ion-card>
+    <h2 *ngIf="lectures.length == 0">There are no lectures today!!! Are you happy? :)</h2>
+  </ion-item-group>
+</ion-content>
