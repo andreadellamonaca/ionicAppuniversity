@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import {UserProvider} from "../../providers/user/user";
 import {LectureProvider} from "../../providers/lecture/lecture";
 import {User} from "../../models/User";
 import {Lecture} from "../../models/Lecture";
@@ -11,6 +10,7 @@ import {Lecture} from "../../models/Lecture";
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+
 
 @IonicPage()
 @Component({
@@ -23,6 +23,7 @@ export class DailyLecturesPage {
   currentdate = new Date();
   date = this.currentdate.getFullYear() + "-" + (this.currentdate.getMonth()+1)  + "-" + this.currentdate.getDate();
   lectures: Lecture[] = [];
+  show = false;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -38,6 +39,11 @@ export class DailyLecturesPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DailyLecturesPage');
+  }
+
+  showMap(latitude: number, longitude: number) {
+    this.show = !this.show;
+    console.log(latitude + ' ' + longitude);
   }
 
 }

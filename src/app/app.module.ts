@@ -13,8 +13,13 @@ import { UserProvider } from '../providers/user/user';
 import {AngularFireModule} from "angularfire2";
 import {HttpClientModule} from "@angular/common/http";
 import {AngularFireAuthModule} from "angularfire2/auth";
+import {AngularFireDatabaseModule} from "angularfire2/database";
 import { LectureProvider } from '../providers/lecture/lecture';
 import {DailyLecturesPage} from "../pages/daily-lectures/daily-lectures";
+import {ChatListPage} from "../pages/chat-list/chat-list";
+import { TeachingProvider } from '../providers/teaching/teaching';
+import {ChatPage} from "../pages/chat/chat";
+import { ChatProvider } from '../providers/chat/chat';
 
 // Initialize Firebase
 var config = {
@@ -32,14 +37,17 @@ var config = {
     HomePage,
     ProfessorPage,
     StudentPage,
-    DailyLecturesPage
+    DailyLecturesPage,
+    ChatListPage,
+    ChatPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(config),
     AngularFireAuthModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -47,14 +55,18 @@ var config = {
     HomePage,
     ProfessorPage,
     StudentPage,
-    DailyLecturesPage
+    DailyLecturesPage,
+    ChatListPage,
+    ChatPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserProvider,
-    LectureProvider
+    LectureProvider,
+    TeachingProvider,
+    ChatProvider
   ]
 })
 export class AppModule {}

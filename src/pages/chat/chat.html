@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ teaching.name }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-input type="text" [(ngModel)]="msgbody"></ion-input>
+    <button ion-button icon-only (click)="sendMessage()"><ion-icon name="send"></ion-icon></button>
+  </ion-toolbar>
+</ion-footer>

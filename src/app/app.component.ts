@@ -8,6 +8,7 @@ import {User} from "../models/User";
 import {ProfessorPage} from "../pages/professor/professor";
 import {StudentPage} from "../pages/student/student";
 import {DailyLecturesPage} from "../pages/daily-lectures/daily-lectures";
+import {ChatListPage} from "../pages/chat-list/chat-list";
 
 @Component({
   templateUrl: 'app.html'
@@ -28,10 +29,14 @@ export class MyApp {
     this.initializeApp();
 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log(this.currentUser);
     if (this.currentUser != null) {
+      console.log('this.currentUser not null');
       if (this.currentUser.usertype.typeName == 'professor') {
+        console.log('rootpage for prof');
         this.rootPage = ProfessorPage;
       } else {
+        console.log('rootpage for stud');
         this.rootPage = StudentPage;
       }
     }
@@ -39,7 +44,7 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: this.rootPage },
       { title: 'Daily Lectures', component: DailyLecturesPage },
-      { title: 'Chat List', component: null },
+      { title: 'Chat List', component: ChatListPage },
       { title: 'Teaching List', component: null}
     ];
   }
