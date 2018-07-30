@@ -9,12 +9,29 @@
 
 
 <ion-content padding>
+  <div id="chatMessages">
+    <div class="message" *ngFor="let message of messages">
+      <div *ngIf="!(message.receiver != currentUser.email && message.type == 'private')"
+           [class]="message.sender == currentUser.email ? 'innerMessage messageRight' : 'innerMessage messageLeft'">
+        <div class="mail">{{ message.sender }}<label *ngIf="message.receiver == currentUser.email"> (private)</label></div>
+        <div class="message">{{ message.body }}</div>
+      </div>
+    </div>
+  </div>
 
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <ion-input type="text" [(ngModel)]="msgbody"></ion-input>
-    <button ion-button icon-only (click)="sendMessage()"><ion-icon name="send"></ion-icon></button>
+    <ion-item><ion-input type="text" [(ngModel)]="msgbody"></ion-input></ion-item>
+    <ion-item>
+      <ion-select [(ngModel)]="receiver">
+        <ion-option *ngFor="let u of participants" value="{{ u.email }}">{{ u.email }}</ion-option>
+        <ion-option value="public" [selected]="true">Public</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="sendMessage()"><ion-icon name="send"></ion-icon></button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-footer>

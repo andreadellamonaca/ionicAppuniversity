@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {Observable} from "rxjs/Observable";
+import {User} from "../../models/User";
 
 /*
   Generated class for the UserProvider provider.
@@ -10,6 +12,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class UserProvider {
   loginurl = 'http://localhost:8080/Project_university/user/getUserByMail_Pwd';
+  userurl = 'http://localhost:8080/Project_university/user/';
 
 
   constructor(public http: HttpClient) { }
@@ -22,5 +25,9 @@ export class UserProvider {
         console.log(err);
       })
     })
+  }
+
+  getUsersByTeachingName(teaching_name: string): Observable<User[]> {
+    return this.http.get<User[]>(this.userurl + 'getUsersByTeachingName/' + teaching_name);
   }
 }

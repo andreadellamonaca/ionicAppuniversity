@@ -20,6 +20,7 @@ import {ChatListPage} from "../pages/chat-list/chat-list";
 import { TeachingProvider } from '../providers/teaching/teaching';
 import {ChatPage} from "../pages/chat/chat";
 import { ChatProvider } from '../providers/chat/chat';
+import {AngularFireDatabase} from "angularfire2/database-deprecated";
 
 // Initialize Firebase
 var config = {
@@ -66,7 +67,8 @@ var config = {
     UserProvider,
     LectureProvider,
     TeachingProvider,
-    ChatProvider
+    ChatProvider,
+    AngularFireDatabase
   ]
 })
 export class AppModule {}
