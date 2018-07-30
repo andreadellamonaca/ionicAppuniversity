@@ -11,9 +11,12 @@
 <ion-content padding>
   <div id="chatMessages">
     <div class="message" *ngFor="let message of messages">
-      <div *ngIf="!(message.receiver != currentUser.email && message.type == 'private')"
+      <div *ngIf="!(message.receiver != currentUser.email && message.type == 'private') || message.sender == currentUser.email"
            [class]="message.sender == currentUser.email ? 'innerMessage messageRight' : 'innerMessage messageLeft'">
-        <div class="mail">{{ message.sender }}<label *ngIf="message.receiver == currentUser.email"> (private)</label></div>
+        <div class="mail">{{ message.sender }}
+          <label *ngIf="message.receiver == currentUser.email"> (private)</label>
+          <label *ngIf="message.sender == currentUser.email && message.type == 'private'"> (to {{ message.receiver }})</label>
+        </div>
         <div class="message">{{ message.body }}</div>
       </div>
     </div>
