@@ -21,6 +21,9 @@ import { TeachingProvider } from '../providers/teaching/teaching';
 import {ChatPage} from "../pages/chat/chat";
 import { ChatProvider } from '../providers/chat/chat';
 import {AngularFireDatabase} from "angularfire2/database-deprecated";
+import {Firebase} from "@ionic-native/firebase";
+import { FcmProvider } from '../providers/fcm/fcm';
+import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
 
 // Initialize Firebase
 var config = {
@@ -47,6 +50,7 @@ var config = {
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(config),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     HttpClientModule,
     AngularFireDatabaseModule
   ],
@@ -68,7 +72,10 @@ var config = {
     LectureProvider,
     TeachingProvider,
     ChatProvider,
-    AngularFireDatabase
+    AngularFireDatabase,
+    Firebase,
+    AngularFirestore,
+    FcmProvider
   ]
 })
 export class AppModule {}

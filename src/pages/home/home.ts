@@ -5,6 +5,7 @@ import {UserProvider} from "../../providers/user/user";
 import {ProfessorPage} from "../professor/professor";
 import {StudentPage} from "../student/student";
 import {User} from "../../models/User";
+import {FcmProvider} from "../../providers/fcm/fcm";
 
 @Component({
   selector: 'page-home',
@@ -16,7 +17,6 @@ export class HomePage {
   user: User;
 
   constructor(public navCtrl: NavController,
-              public fireAuth: AngularFireAuth,
               public alertCtrl: AlertController,
               public userProvider: UserProvider) { }
 
