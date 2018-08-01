@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {User} from "../../models/User";
+import {Variables} from "../../Variables";
 
 /*
   Generated class for the UserProvider provider.
@@ -11,8 +12,8 @@ import {User} from "../../models/User";
 */
 @Injectable()
 export class UserProvider {
-  loginurl = 'http://localhost:8080/Project_university/user/getUserByMail_Pwd';
-  userurl = 'http://localhost:8080/Project_university/user/';
+  loginurl = `${Variables.ServerURL}/user/getUserByMail_Pwd`;
+  userurl = `${Variables.ServerURL}/user/`;
 
 
   constructor(public http: HttpClient) { }

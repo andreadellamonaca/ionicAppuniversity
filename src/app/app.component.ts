@@ -9,6 +9,7 @@ import {ProfessorPage} from "../pages/professor/professor";
 import {StudentPage} from "../pages/student/student";
 import {DailyLecturesPage} from "../pages/daily-lectures/daily-lectures";
 import {ChatListPage} from "../pages/chat-list/chat-list";
+import {FcmProvider} from "../providers/fcm/fcm";
 
 @Component({
   templateUrl: 'app.html'
@@ -23,7 +24,8 @@ export class MyApp {
 
   constructor(public platform: Platform,
               public statusBar: StatusBar,
-              public splashScreen: SplashScreen) {
+              public splashScreen: SplashScreen,
+              public fcm: FcmProvider) {
 
     localStorage.removeItem('currentUser');
     this.initializeApp();
@@ -65,7 +67,10 @@ export class MyApp {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    this.nav.setRoot(HomePage);
+    this.fcm.removeToken().subscribe(data =>{
+      console.log('Removed session!');
+      localStorage.removeItem('currentUser');
+      this.nav.setRoot(HomePage);
+    });
   }
 }

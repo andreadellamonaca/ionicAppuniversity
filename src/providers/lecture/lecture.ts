@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {User} from "../../models/User";
 import {Observable} from "rxjs/Observable";
 import {Lecture} from "../../models/Lecture";
+import {Variables} from "../../Variables";
 
 /*
   Generated class for the LectureProvider provider.
@@ -13,7 +14,7 @@ import {Lecture} from "../../models/Lecture";
 @Injectable()
 export class LectureProvider {
 
-  lectureurl = 'http://localhost:8080/Project_university/lecture';
+  lectureurl = `${Variables.ServerURL}/lecture`;
 
   constructor(public http: HttpClient) {
     console.log('Hello LectureProvider Provider');

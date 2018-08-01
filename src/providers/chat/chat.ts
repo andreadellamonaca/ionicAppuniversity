@@ -31,7 +31,14 @@ export class ChatProvider {
         };
         let updates = {};
         updates['/'+teaching_name+'/messages/'+ index] = postData;
-        return firebase.database().ref().update(updates);
+        firebase.database().ref().update(updates);
+        //Call backend to send push notification
+        if ( type == 'private') {
+          //send messageto user -> "" -> """ to a particular user
+        }
+        if ( type == 'public') {
+          //send message to topic -> call backend service -> push notification to all participants
+        }
       });
   }
 
