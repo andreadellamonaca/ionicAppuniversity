@@ -42,13 +42,12 @@ export class MyApp {
         this.rootPage = StudentPage;
       }
     }
-
     this.pages = [
       { title: 'Home', component: this.rootPage },
       { title: 'Daily Lectures', component: DailyLecturesPage },
       { title: 'Chat List', component: ChatListPage },
       { title: 'Teaching List', component: null}
-    ];
+      ];
   }
 
   initializeApp() {

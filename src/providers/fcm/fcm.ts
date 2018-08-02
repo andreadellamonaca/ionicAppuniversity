@@ -7,6 +7,7 @@ import {TokenForm} from "../../models/TokenForm";
 import {User} from "../../models/User";
 import {Variables} from "../../Variables";
 import {Observable} from "rxjs/Observable";
+import {from} from "rxjs/internal/observable/from";
 
 /*
   Generated class for the FcmProvider provider.
@@ -67,5 +68,9 @@ export class FcmProvider {
   // Listen to incoming FCM messages
   listenToNotifications() {
     return this.firebaseNative.onNotificationOpen();
+  }
+
+  public subscribeToTopic(topic: string) {
+    return from(this.firebaseNative.subscribe(topic));
   }
 }

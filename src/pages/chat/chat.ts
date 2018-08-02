@@ -43,14 +43,17 @@ export class ChatPage {
       this.messages = JSON.parse(JSON.stringify(data));
       console.log(this.messages);
     });
-    this.userProvider.getUsersByTeachingName(this.teaching.name).subscribe(list => {
-      list.splice(list.indexOf(this.currentUser),1);
-      this.participants = list;
-    })
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChatPage');
+    this.userProvider.getUsersByTeachingName(this.teaching.name).subscribe(list => {
+      for (let i of list) {
+        if (i.idUser != this.currentUser.idUser) {
+          this.participants.push(i);
+        }
+      }
+    })
   }
 
   sendMessage() {

@@ -23,6 +23,9 @@ export class TeachingProvider {
     if (user.usertype.typeName == 'professor') {
       return this.http.get<Teaching[]>(this.teachingurl + '/getTeachingByIdProfessor/' + user.idUser);
     }
+    if (user.usertype.typeName == 'student') {
+      return this.http.get<Teaching[]>(this.teachingurl + '/getTeachingByIdStudent/' + user.idUser);
+    }
   }
 
 }

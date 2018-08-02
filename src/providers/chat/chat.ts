@@ -5,6 +5,7 @@ import * as firebase from "firebase";
 import {Variables} from "../../Variables";
 import {Notification} from "../../models/Notification";
 import {Observable} from "rxjs/Observable";
+import {map} from "rxjs/operators";
 
 /*
   Generated class for the ChatProvider provider.
@@ -49,10 +50,12 @@ export class ChatProvider {
           let notification: Notification = {
             head: teaching_name + ' [Private]',
             body: sender + ': ' + msgbody,
-            token_topic: teaching_name,
+            token_topic: receiver,
           };
           console.log(notification);
-          protocol.post<Notification>(url +'/toUser', notification, {headers});
+          protocol.post<Notification>(url +'/toUser', notification, {headers}).subscribe(data => {
+            console.log('returned: '+ data);
+          })
         }
         if ( type == 'public') {
           console.log('Creo notifica pubblica');
@@ -62,7 +65,9 @@ export class ChatProvider {
             token_topic: teaching_name,
           };
           console.log(notification);
-          protocol.post<Notification>(url +'/toTopic', notification, {headers});
+          protocol.post<Notification>(url +'/toTopic', notification, {headers}).subscribe(data => {
+            console.log('returned: '+ data);
+          });
         }
       });
   }
