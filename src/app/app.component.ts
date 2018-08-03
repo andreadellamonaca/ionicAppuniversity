@@ -29,25 +29,12 @@ export class MyApp {
 
     localStorage.removeItem('currentUser');
     this.initializeApp();
-
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    console.log(this.currentUser);
-    if (this.currentUser != null) {
-      console.log('this.currentUser not null');
-      if (this.currentUser.usertype.typeName == 'professor') {
-        console.log('rootpage for prof');
-        this.rootPage = ProfessorPage;
-      } else {
-        console.log('rootpage for stud');
-        this.rootPage = StudentPage;
-      }
-    }
     this.pages = [
       { title: 'Home', component: this.rootPage },
       { title: 'Daily Lectures', component: DailyLecturesPage },
       { title: 'Chat List', component: ChatListPage },
       { title: 'Teaching List', component: null}
-      ];
+    ];
   }
 
   initializeApp() {
@@ -62,6 +49,20 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
+    if (page.title == 'Home') {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (this.currentUser.usertype.typeName == 'professor') {
+        this.rootPage = ProfessorPage;
+      } else {
+        this.rootPage = StudentPage;
+      }
+      this.pages = [
+        { title: 'Home', component: this.rootPage },
+        { title: 'Daily Lectures', component: DailyLecturesPage },
+        { title: 'Chat List', component: ChatListPage },
+        { title: 'Teaching List', component: null}
+      ];
+    }
     this.nav.setRoot(page.component);
   }
 

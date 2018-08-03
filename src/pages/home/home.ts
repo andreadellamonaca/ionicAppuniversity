@@ -1,11 +1,10 @@
 import {Component, ViewChild} from '@angular/core';
 import {AlertController, NavController} from 'ionic-angular';
-import {AngularFireAuth} from "angularfire2/auth";
 import {UserProvider} from "../../providers/user/user";
 import {ProfessorPage} from "../professor/professor";
 import {StudentPage} from "../student/student";
 import {User} from "../../models/User";
-import {FcmProvider} from "../../providers/fcm/fcm";
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
@@ -32,23 +31,9 @@ export class HomePage {
         console.log('STUDENT');
         this.navCtrl.setRoot(StudentPage);
       } else {this.showAlert('You are not sign up!');}
-    }).catch(err => { console.log(err.message);});
-
-    /*
-        this.fireAuth.auth.signInWithEmailAndPassword(this.email.value, this.password.value).then(data => {
-            console.log(data);
-            data.user.getIdTokenResult(true).then(result => {
-              console.log(result);
-
-            });
-            //this.navCtrl.push(null, {param: data.user.email});
-            this.showAlert('Successful logged in!');
-        })
-          .catch(err => {
-            console.log(err.message);
-            this.showAlert(err.message);
-          });
-    */
+    }).catch(err => {
+      this.showAlert('Error!');
+      console.log(err.message);});
   }
 
   showAlert(message: string) {

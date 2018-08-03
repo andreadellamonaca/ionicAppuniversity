@@ -52,7 +52,7 @@ var config = {
     AngularFireAuthModule,
     AngularFirestoreModule,
     HttpClientModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
