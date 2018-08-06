@@ -4,7 +4,6 @@ import {UserProvider} from "../../providers/user/user";
 import {ProfessorPage} from "../professor/professor";
 import {StudentPage} from "../student/student";
 import {User} from "../../models/User";
-import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
@@ -20,7 +19,7 @@ export class HomePage {
               public userProvider: UserProvider) { }
 
   LogInUser() {
-    this.userProvider.checkUserCredentials(this.email.value, this.password.value).then(data => {
+    this.userProvider.checkUserCredentials(this.email.value, this.password.value).subscribe(data => {
       console.log(data);
       this.user = data;
       localStorage.setItem('currentUser', JSON.stringify(this.user));
@@ -31,8 +30,8 @@ export class HomePage {
         console.log('STUDENT');
         this.navCtrl.setRoot(StudentPage);
       } else {this.showAlert('You are not sign up!');}
-    }).catch(err => {
-      this.showAlert('Error!');
+    }, err =>{
+      this.showAlert('Error! Your credentials are wrong!');
       console.log(err.message);});
   }
 

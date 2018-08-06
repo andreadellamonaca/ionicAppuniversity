@@ -23,6 +23,12 @@ export class LectureProvider {
   getDailyLecturesByDate_IdUser(date: string, user: User): Observable<Lecture[]> {
     if (user.usertype.typeName == 'professor') {
       return this.http.get<Lecture[]>(this.lectureurl + '/getDailyLectureByIdProfAndDate/' + user.idUser + '/' + date);
-    } else {}
+    } else {
+      return this.http.get<Lecture[]>(this.lectureurl + '/getDailyLectureByIdStudent/' + user.idUser + '/' + date);
+    }
+  }
+
+  getLecturesByIdTeaching(idTeaching: number): Observable<Lecture[]> {
+    return this.http.get<Lecture[]>(this.lectureurl + '/getLecturesByIdTeaching/' + idTeaching);
   }
 }

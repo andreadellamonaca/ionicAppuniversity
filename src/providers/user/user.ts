@@ -18,14 +18,8 @@ export class UserProvider {
 
   constructor(public http: HttpClient) { }
 
-  checkUserCredentials(mail: string, password: string) {
-    return new Promise(resolve => {
-      this.http.get(this.loginurl + '/' + mail + '/' + password).subscribe(data => {
-        resolve(data);
-      }, err => {
-        console.log(err);
-      })
-    })
+  checkUserCredentials(mail: string, password: string): Observable<User> {
+    return this.http.get<User>(this.loginurl + '/' + mail + '/' + password);
   }
 
   getUsersByTeachingName(teaching_name: string): Observable<User[]> {

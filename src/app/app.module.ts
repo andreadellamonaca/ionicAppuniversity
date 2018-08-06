@@ -24,6 +24,10 @@ import {AngularFireDatabase} from "angularfire2/database-deprecated";
 import {Firebase} from "@ionic-native/firebase";
 import { FcmProvider } from '../providers/fcm/fcm';
 import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
+import {TeachingListPage} from "../pages/teaching-list/teaching-list";
+import {TeachingPage} from "../pages/teaching/teaching";
+import { LectureSatisfactionProvider } from '../providers/lecture-satisfaction/lecture-satisfaction';
+import { Ionic2RatingModule } from 'ionic2-rating';
 
 // Initialize Firebase
 var config = {
@@ -43,7 +47,9 @@ var config = {
     StudentPage,
     DailyLecturesPage,
     ChatListPage,
-    ChatPage
+    ChatPage,
+    TeachingListPage,
+    TeachingPage
   ],
   imports: [
     BrowserModule,
@@ -53,6 +59,7 @@ var config = {
     AngularFirestoreModule,
     HttpClientModule,
     AngularFireDatabaseModule,
+    Ionic2RatingModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -62,7 +69,9 @@ var config = {
     StudentPage,
     DailyLecturesPage,
     ChatListPage,
-    ChatPage
+    ChatPage,
+    TeachingListPage,
+    TeachingPage
   ],
   providers: [
     StatusBar,
@@ -75,7 +84,8 @@ var config = {
     AngularFireDatabase,
     Firebase,
     AngularFirestore,
-    FcmProvider
+    FcmProvider,
+    LectureSatisfactionProvider
   ]
 })
 export class AppModule {}
