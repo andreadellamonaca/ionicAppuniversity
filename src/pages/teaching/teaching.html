@@ -19,7 +19,7 @@
           <ion-item>
             <ion-card>
               <ion-card-content>
-                <a href="{{ tm.link }}">{{ tm.name }}</a>
+                <a (click)="downloadMaterial(tm)">{{ tm.name }}</a>
               </ion-card-content>
               <button ion-button (click)="RateMaterial(tm)" clear>Rate the material!</button>
             </ion-card>

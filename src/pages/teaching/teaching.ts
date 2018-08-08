@@ -10,6 +10,7 @@ import {TeachingMaterialProvider} from "../../providers/teaching-material/teachi
 import {TeachingMaterial} from "../../models/TeachingMaterial";
 import {MaterialSatisfactionProvider} from "../../providers/material-satisfaction/material-satisfaction";
 import {MaterialSatisfaction} from "../../models/MaterialSatisfaction";
+import {FileTransferObject} from "@ionic-native/file-transfer";
 
 /**
  * Generated class for the TeachingPage page.
@@ -17,6 +18,7 @@ import {MaterialSatisfaction} from "../../models/MaterialSatisfaction";
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+declare var cordova: any;
 
 @IonicPage()
 @Component({
@@ -36,7 +38,9 @@ export class TeachingPage {
               public lsProvider: LectureSatisfactionProvider,
               public modalCtrl: ModalController,
               public tmProvider: TeachingMaterialProvider,
-              public msProvider: MaterialSatisfactionProvider) {
+              public msProvider: MaterialSatisfactionProvider,
+              private transfer: FileTransfer,
+              private file: File) {
 
     this.teaching = this.navParams.get('Teaching');
 
@@ -70,10 +74,20 @@ export class TeachingPage {
   RateMaterial(tm: TeachingMaterial) {
     this.msProvider.getMaterialSatisfactionByIdUserAndIdMaterial(this.current.idUser, tm.idTeachingMaterial).subscribe(getrating =>{
       this.materialrating = getrating;
-      console.log(this.materialrating);
       let modal = this.modalCtrl.create(MaterialRatingPage, {msat : this.materialrating, tmaterial: tm});
       modal.present();
     })
+  }
+
+  downloadMaterial(tm: TeachingMaterial) {
+    if (tm.type != "link") {
+      const url = tm.link;/*
+      this.transfer.download(url, cordova.file.dataDirectory + tm.name).then((entry) => {
+        console.log('download complete: ' + entry.toURL());
+      }, (error) => {
+        // handle error
+      });*/
+    }
   }
 }
 
