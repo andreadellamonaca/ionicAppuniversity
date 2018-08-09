@@ -93,7 +93,8 @@ var config = {
     FcmProvider,
     LectureSatisfactionProvider,
     TeachingMaterialProvider,
-    MaterialSatisfactionProvider
+    MaterialSatisfactionProvider,
+    FileTransfer
   ]
 })
 export class AppModule {}
