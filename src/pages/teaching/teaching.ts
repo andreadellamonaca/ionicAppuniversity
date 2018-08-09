@@ -19,8 +19,8 @@ import {TeachingMaterial} from "../../models/TeachingMaterial";
 import {MaterialSatisfactionProvider} from "../../providers/material-satisfaction/material-satisfaction";
 import {MaterialSatisfaction} from "../../models/MaterialSatisfaction";
 import {File, FileEntry} from '@ionic-native/file';
-import { FileTransfer } from '@ionic-native/file-transfer';
 import {HttpResponse} from "@angular/common/http";
+import {LocalNotifications} from "@ionic-native/local-notifications";
 
 declare var cordova: any;
 
@@ -50,9 +50,9 @@ export class TeachingPage {
               public modalCtrl: ModalController,
               public tmProvider: TeachingMaterialProvider,
               public msProvider: MaterialSatisfactionProvider,
-              public transfer: FileTransfer,
               public file: File,
-              public alertctrl: AlertController) {
+              public alertctrl: AlertController,
+              public localnotif: LocalNotifications) {
 
     this.teaching = this.navParams.get('Teaching');
 
@@ -103,7 +103,10 @@ export class TeachingPage {
         console.log(cordova.file.dataDirectory);
         this.file.writeFile(cordova.file.externalRootDirectory + '/Download/', tm.name, blob, {replace: true})
           .then((fileEntry: FileEntry) => {
-            this.showAlert("Download complete at: " + fileEntry.toURL());
+            this.localnotif.schedule({
+              title: 'Downloaded ' + tm.name,
+              text: 'Download completed at' + fileEntry.toURL()
+            });
           }).catch(err =>  this.showAlert("Error: " + err))
       }, error => this.showAlert("Error: " + error));
     }
@@ -111,7 +114,7 @@ export class TeachingPage {
 
   showAlert(message: string) {
     let alert = this.alertctrl.create({
-      title: 'Login!',
+      title: 'Download Error!',
       subTitle: message,
       buttons: ['OK']
     });

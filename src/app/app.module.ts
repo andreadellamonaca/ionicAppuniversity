@@ -32,6 +32,7 @@ import { TeachingMaterialProvider } from '../providers/teaching-material/teachin
 import { MaterialSatisfactionProvider } from '../providers/material-satisfaction/material-satisfaction';
 import {FileTransfer} from "@ionic-native/file-transfer";
 import {File} from "@ionic-native/file";
+import {LocalNotifications} from "@ionic-native/local-notifications";
 
 // Initialize Firebase
 var config = {
@@ -97,7 +98,8 @@ var config = {
     TeachingMaterialProvider,
     MaterialSatisfactionProvider,
     FileTransfer,
-    File
+    File,
+    LocalNotifications
   ]
 })
 export class AppModule {}
