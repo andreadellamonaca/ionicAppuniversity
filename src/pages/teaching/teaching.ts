@@ -1,5 +1,13 @@
 import {Component} from '@angular/core';
-import {IonicPage, ModalController, NavController, NavParams, Platform, ViewController} from 'ionic-angular';
+import {
+  AlertController,
+  IonicPage,
+  ModalController,
+  NavController,
+  NavParams,
+  Platform,
+  ViewController
+} from 'ionic-angular';
 import {Teaching} from "../../models/Teaching";
 import {Lecture} from "../../models/Lecture";
 import {LectureProvider} from "../../providers/lecture/lecture";
@@ -10,8 +18,11 @@ import {TeachingMaterialProvider} from "../../providers/teaching-material/teachi
 import {TeachingMaterial} from "../../models/TeachingMaterial";
 import {MaterialSatisfactionProvider} from "../../providers/material-satisfaction/material-satisfaction";
 import {MaterialSatisfaction} from "../../models/MaterialSatisfaction";
-import { File } from '@ionic-native/file';
+import {File, FileEntry} from '@ionic-native/file';
 import { FileTransfer } from '@ionic-native/file-transfer';
+import {HttpResponse} from "@angular/common/http";
+
+declare var cordova: any;
 
 /**
  * Generated class for the TeachingPage page.
@@ -19,7 +30,6 @@ import { FileTransfer } from '@ionic-native/file-transfer';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-declare var cordova: any;
 
 @IonicPage()
 @Component({
@@ -40,9 +50,9 @@ export class TeachingPage {
               public modalCtrl: ModalController,
               public tmProvider: TeachingMaterialProvider,
               public msProvider: MaterialSatisfactionProvider,
-              private transfer: FileTransfer,
-              private file: File,
-              private platform: Platform) {
+              public transfer: FileTransfer,
+              public file: File,
+              public alertctrl: AlertController) {
 
     this.teaching = this.navParams.get('Teaching');
 
@@ -62,10 +72,11 @@ export class TeachingPage {
   RateLecture(l: Lecture) {
     this.lsProvider.getLectureSatisfactionByIdUserAndIdLecture(this.current.idUser, l.idLecture).subscribe(getrating => {
       this.rating = getrating;
-      let modal = this.modalCtrl.create(LectureRatingPage, {sat : this.rating, lecture: l});
+      let modal = this.modalCtrl.create(LectureRatingPage, {sat: this.rating, lecture: l});
       modal.present();
     });
   }
+
   showMaterial(l: Lecture) {
     this.tmProvider.getTeachingMaterialByIdLecture(l.idLecture).subscribe(data => {
       l.tmaterials = data;
@@ -74,40 +85,38 @@ export class TeachingPage {
   }
 
   RateMaterial(tm: TeachingMaterial) {
-    this.msProvider.getMaterialSatisfactionByIdUserAndIdMaterial(this.current.idUser, tm.idTeachingMaterial).subscribe(getrating =>{
+    this.msProvider.getMaterialSatisfactionByIdUserAndIdMaterial(this.current.idUser, tm.idTeachingMaterial).subscribe(getrating => {
       this.materialrating = getrating;
-      let modal = this.modalCtrl.create(MaterialRatingPage, {msat : this.materialrating, tmaterial: tm});
+      let modal = this.modalCtrl.create(MaterialRatingPage, {msat: this.materialrating, tmaterial: tm});
       modal.present();
     })
   }
 
   downloadMaterial(tm: TeachingMaterial) {
-    let path = null;
-    if(this.platform.is('ios')){
-      this.file.dataDirectory
-    }
-    else {
-      path = this.file.dataDirectory;
-    }
-
-    const transf = this.transfer.create();
-    transf.download('https://www.unisalento.it/documents/20152/163485/Lez01_+Introduzione+al+corso.pdf/3f19dc5d-daf7-8279-68af-84c17dac19fa?version=1.0&download=true', path + 'myfile.pdf').then(entry => {
-      let url = entry.toUrl();
-      console.log(url);
-    });
-
-  /*
     if (tm.type != "link") {
-      const url = tm.link;/*
-      this.transfer.download(url, cordova.file.dataDirectory + tm.name).then((entry) => {
-        console.log('download complete: ' + entry.toURL());
-      }, (error) => {
-        // handle error
-      });
-    } */
-
+      this.tmProvider.download(tm).subscribe((res: HttpResponse<Object>) => {
+        console.log(res);
+        const contentType = res.headers.get('Content-Type');
+        const blob: Blob = new Blob([res.body], {
+          type: contentType
+        });
+        console.log(cordova.file.dataDirectory);
+        this.file.writeFile(cordova.file.externalRootDirectory + '/Download/', tm.name, blob, {replace: true})
+          .then((fileEntry: FileEntry) => {
+            this.showAlert("Download complete at: " + fileEntry.toURL());
+          }).catch(err =>  this.showAlert("Error: " + err))
+      }, error => this.showAlert("Error: " + error));
+    }
   }
 
+  showAlert(message: string) {
+    let alert = this.alertctrl.create({
+      title: 'Login!',
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
 }
 
 @Component({

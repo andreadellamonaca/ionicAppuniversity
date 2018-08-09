@@ -15,7 +15,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "plugins/cordova-plugin-file-transfer/types/index.d.ts"
+    "plugins/cordova-plugin-file-transfer/types/index.d.ts",
+    "node_modules/cordova-plugin-file/types/index.d.ts"
   ],
   "exclude": [
     "node_modules",

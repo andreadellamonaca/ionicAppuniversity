@@ -30,6 +30,8 @@ import { LectureSatisfactionProvider } from '../providers/lecture-satisfaction/l
 import { Ionic2RatingModule } from 'ionic2-rating';
 import { TeachingMaterialProvider } from '../providers/teaching-material/teaching-material';
 import { MaterialSatisfactionProvider } from '../providers/material-satisfaction/material-satisfaction';
+import {FileTransfer} from "@ionic-native/file-transfer";
+import {File} from "@ionic-native/file";
 
 // Initialize Firebase
 var config = {
@@ -94,7 +96,8 @@ var config = {
     LectureSatisfactionProvider,
     TeachingMaterialProvider,
     MaterialSatisfactionProvider,
-    FileTransfer
+    FileTransfer,
+    File
   ]
 })
 export class AppModule {}

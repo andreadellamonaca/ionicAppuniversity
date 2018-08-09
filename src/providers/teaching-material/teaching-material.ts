@@ -23,4 +23,9 @@ export class TeachingMaterialProvider {
 
   }
 
+
+  download(tm: TeachingMaterial): Observable<any> {
+    return this.http.post(this.tmurl + 'downloadFile', tm.link, { responseType: 'blob' as 'json', observe: 'response' });
+  }
+
 }
