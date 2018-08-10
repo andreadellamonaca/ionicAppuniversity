@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {MaterialSatisfaction} from "../../models/MaterialSatisfaction";
 import {Variables} from "../../Variables";
-import {LectureSatisfaction} from "../../models/LectureSatisfaction";
 
 /*
   Generated class for the MaterialSatisfactionProvider provider.
@@ -22,8 +21,16 @@ export class MaterialSatisfactionProvider {
     console.log('Hello MaterialSatisfactionProvider Provider');
   }
 
+  getAverageRatingByIdMaterial(idMaterial: number): Observable<number> {
+    return this.http.get<number>(this.msurl + 'getAverageRatingByIdMaterial/' + idMaterial);
+  }
+
   getMaterialSatisfactionByIdUserAndIdMaterial(idUser: number, idMaterial: number): Observable<MaterialSatisfaction> {
     return this.http.get<MaterialSatisfaction>(this.msurl + 'getMaterialSatisfactionByIdUserAndIdMaterial/' + idUser + '/' + idMaterial);
+  }
+
+  getMaterialSatisfactionByIdMaterial(idMaterial: number): Observable<MaterialSatisfaction[]> {
+    return this.http.get<MaterialSatisfaction[]>(this.msurl + 'getMaterialSatisfactionByIdMaterial/' + idMaterial);
   }
 
   saveMaterialSatisfaction(ms: MaterialSatisfaction): Observable<MaterialSatisfaction> {

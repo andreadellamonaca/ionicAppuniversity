@@ -5,7 +5,7 @@ import {
   ModalController,
   NavController,
   NavParams,
-  Platform,
+  Platform, ToastController,
   ViewController
 } from 'ionic-angular';
 import {Teaching} from "../../models/Teaching";
@@ -21,6 +21,7 @@ import {MaterialSatisfaction} from "../../models/MaterialSatisfaction";
 import {File, FileEntry} from '@ionic-native/file';
 import {HttpResponse} from "@angular/common/http";
 import {LocalNotifications} from "@ionic-native/local-notifications";
+import {NotificationProvider} from "../../providers/notification/notification";
 
 declare var cordova: any;
 
@@ -43,8 +44,7 @@ export class TeachingPage {
   rating: LectureSatisfaction;
   materialrating: MaterialSatisfaction;
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
+  constructor(public navParams: NavParams,
               public lectureProvider: LectureProvider,
               public lsProvider: LectureSatisfactionProvider,
               public modalCtrl: ModalController,
@@ -52,7 +52,8 @@ export class TeachingPage {
               public msProvider: MaterialSatisfactionProvider,
               public file: File,
               public alertctrl: AlertController,
-              public localnotif: LocalNotifications) {
+              public localnotif: LocalNotifications,
+              public toastCtrl: ToastController) {
 
     this.teaching = this.navParams.get('Teaching');
 
@@ -60,7 +61,11 @@ export class TeachingPage {
       this.lectures = lectureslist;
       for (let i of this.lectures) {
         i.hide_material = false;
+        this.lsProvider.getAverageRatingByIdLecture(i.idLecture).subscribe(rate =>{
+          i.av_rating = rate;
+        });
       }
+      console.log(this.lectures);
     });
     this.current = JSON.parse(localStorage.getItem('currentUser'));
   }
@@ -81,6 +86,11 @@ export class TeachingPage {
     this.tmProvider.getTeachingMaterialByIdLecture(l.idLecture).subscribe(data => {
       l.tmaterials = data;
       l.hide_material = !l.hide_material;
+      for (let i of l.tmaterials) {
+        this.msProvider.getAverageRatingByIdMaterial(i.idTeachingMaterial).subscribe(rate =>{
+          i.av_rating = rate;
+        });
+      }
     });
   }
 
@@ -95,17 +105,13 @@ export class TeachingPage {
   downloadMaterial(tm: TeachingMaterial) {
     if (tm.type != "link") {
       this.tmProvider.download(tm).subscribe((res: HttpResponse<Object>) => {
-        console.log(res);
         const contentType = res.headers.get('Content-Type');
-        const blob: Blob = new Blob([res.body], {
-          type: contentType
-        });
-        console.log(cordova.file.dataDirectory);
+        const blob: Blob = new Blob([res.body], { type: contentType });
         this.file.writeFile(cordova.file.externalRootDirectory + '/Download/', tm.name, blob, {replace: true})
-          .then((fileEntry: FileEntry) => {
+          .then((entry: FileEntry) => {
             this.localnotif.schedule({
               title: 'Downloaded ' + tm.name,
-              text: 'Download completed at' + fileEntry.toURL()
+              text: 'Download completed in Download folder.'
             });
           }).catch(err =>  this.showAlert("Error: " + err))
       }, error => this.showAlert("Error: " + error));
@@ -119,6 +125,11 @@ export class TeachingPage {
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  showAllRatings(id: number, sattype: string) {
+    let modal = this.modalCtrl.create(RatingListPage, {idobject: id, type: sattype});
+    modal.present();
   }
 }
 
@@ -162,7 +173,9 @@ export class LectureRatingPage {
     public platform: Platform,
     public params: NavParams,
     public viewCtrl: ViewController,
-    public lsProvider: LectureSatisfactionProvider) {
+    public lsProvider: LectureSatisfactionProvider,
+    public notProvider: NotificationProvider) {
+
     this.current = JSON.parse(localStorage.getItem('currentUser'));
     if (this.params.get('sat') != null) {
       this.ls = this.params.get('sat');
@@ -189,6 +202,9 @@ export class LectureRatingPage {
       };
       this.lsProvider.saveLectureSatisfaction(lectsat).subscribe(data => {
         console.log(data);
+        this.notProvider.LectureRateNotification(lectsat.lecture).subscribe(data => {
+          console.log('returned: '+ data);
+        });
         this.dismiss();
       });
     } else {
@@ -198,6 +214,9 @@ export class LectureRatingPage {
       this.ls.lecture.idLecture = this.lecture.idLecture;
       this.lsProvider.saveLectureSatisfaction(this.ls).subscribe(data => {
         console.log(data);
+        this.notProvider.LectureRateNotification(this.lecture).subscribe(data => {
+          console.log('returned: '+ data);
+        });
         this.dismiss();
       });
     }
@@ -244,7 +263,9 @@ export class MaterialRatingPage {
     public platform: Platform,
     public params: NavParams,
     public viewCtrl: ViewController,
-    public msProvider: MaterialSatisfactionProvider) {
+    public msProvider: MaterialSatisfactionProvider,
+    public notProvider: NotificationProvider) {
+
     this.current = JSON.parse(localStorage.getItem('currentUser'));
     if (this.params.get('msat') != null) {
       this.ms = this.params.get('msat');
@@ -271,6 +292,9 @@ export class MaterialRatingPage {
       };
       this.msProvider.saveMaterialSatisfaction(msat).subscribe(data => {
         console.log(data);
+        this.notProvider.MaterialRateNotification(msat.teachingmaterial).subscribe(data => {
+          console.log(data);
+        });
         this.dismiss();
       });
     } else {
@@ -280,8 +304,76 @@ export class MaterialRatingPage {
       this.ms.teachingmaterial.idTeachingMaterial = this.tm.idTeachingMaterial;
       this.msProvider.saveMaterialSatisfaction(this.ms).subscribe(data => {
         console.log(data);
+        this.notProvider.MaterialRateNotification(this.ms.teachingmaterial).subscribe(data => {
+          console.log(data);
+        });
         this.dismiss();
       });
     }
   }
+}
+
+@Component({
+  template: `
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Rating list
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>#</ion-col>
+      <ion-col>Level</ion-col>
+      <ion-col>Note</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let i of lectlist; let num = index">
+      <ion-col>{{ num+1 }}</ion-col>
+      <ion-col>{{ i.level }}</ion-col>
+      <ion-col>{{ i.note }}</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let i of matlist; let num = index">
+      <ion-col>{{ num+1 }}</ion-col>
+      <ion-col>{{ i.level }}</ion-col>
+      <ion-col>{{ i.note }}</ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+`
+})
+export class RatingListPage {
+
+  lectlist: LectureSatisfaction[] = [];
+  matlist: MaterialSatisfaction[] = [];
+
+  constructor(
+    public platform: Platform,
+    public params: NavParams,
+    public viewCtrl: ViewController,
+    public lsProvider: LectureSatisfactionProvider,
+    public msProvider: MaterialSatisfactionProvider) {
+
+    if (this.params.get('type') == 'lecture') {
+      this.lsProvider.getLectureSatisfactionByIdLecture(this.params.get('idobject')).subscribe(list => {
+        this.lectlist = list;
+      })
+    } else {
+      this.msProvider.getMaterialSatisfactionByIdMaterial(this.params.get('idobject')).subscribe(list => {
+        this.matlist = list;
+      })
+    }
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
 }

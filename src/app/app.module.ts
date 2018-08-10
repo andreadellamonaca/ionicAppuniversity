@@ -25,7 +25,7 @@ import {Firebase} from "@ionic-native/firebase";
 import { FcmProvider } from '../providers/fcm/fcm';
 import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
 import {TeachingListPage} from "../pages/teaching-list/teaching-list";
-import {LectureRatingPage, MaterialRatingPage, TeachingPage} from "../pages/teaching/teaching";
+import {LectureRatingPage, MaterialRatingPage, RatingListPage, TeachingPage} from "../pages/teaching/teaching";
 import { LectureSatisfactionProvider } from '../providers/lecture-satisfaction/lecture-satisfaction';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import { TeachingMaterialProvider } from '../providers/teaching-material/teaching-material';
@@ -33,6 +33,7 @@ import { MaterialSatisfactionProvider } from '../providers/material-satisfaction
 import {FileTransfer} from "@ionic-native/file-transfer";
 import {File} from "@ionic-native/file";
 import {LocalNotifications} from "@ionic-native/local-notifications";
+import { NotificationProvider } from '../providers/notification/notification';
 
 // Initialize Firebase
 var config = {
@@ -56,7 +57,8 @@ var config = {
     TeachingListPage,
     TeachingPage,
     LectureRatingPage,
-    MaterialRatingPage
+    MaterialRatingPage,
+    RatingListPage
   ],
   imports: [
     BrowserModule,
@@ -80,7 +82,8 @@ var config = {
     TeachingListPage,
     TeachingPage,
     LectureRatingPage,
-    MaterialRatingPage
+    MaterialRatingPage,
+    RatingListPage
   ],
   providers: [
     StatusBar,
@@ -99,7 +102,8 @@ var config = {
     MaterialSatisfactionProvider,
     FileTransfer,
     File,
-    LocalNotifications
+    LocalNotifications,
+    NotificationProvider
   ]
 })
 export class AppModule {}

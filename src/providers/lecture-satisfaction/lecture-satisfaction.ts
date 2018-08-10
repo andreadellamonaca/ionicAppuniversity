@@ -21,12 +21,16 @@ export class LectureSatisfactionProvider {
     console.log('Hello LectureSatisfactionProvider Provider');
   }
 
+  getAverageRatingByIdLecture(idLecture: number): Observable<number> {
+    return this.http.get<number>(this.lsurl + 'getAverageRatingByIdLecture/' + idLecture);
+  }
+
   getLectureSatisfactionByIdUserAndIdLecture(idUser: number, idLecture: number): Observable<LectureSatisfaction> {
     return this.http.get<LectureSatisfaction>(this.lsurl + 'getLectureSatisfactionByIdUserAndIdLecture/' + idUser + '/' + idLecture);
   }
 
-  getLectureSatisfactionByIdLecture(idLecture: number): Observable<LectureSatisfaction> {
-    return this.http.get<LectureSatisfaction>(this.lsurl + 'getLectureSatisfactionsByIdLecture/' + idLecture);
+  getLectureSatisfactionByIdLecture(idLecture: number): Observable<LectureSatisfaction[]> {
+    return this.http.get<LectureSatisfaction[]>(this.lsurl + 'getLectureSatisfactionsByIdLecture/' + idLecture);
   }
 
   saveLectureSatisfaction(ls: LectureSatisfaction): Observable<LectureSatisfaction> {
