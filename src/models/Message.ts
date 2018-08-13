@@ -3,4 +3,6 @@ export interface Message {
   sender: string;
   type: string;
   receiver: string;
+  date: string;
+  hour: string;
 }

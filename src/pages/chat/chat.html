@@ -10,7 +10,13 @@
 
 <ion-content padding>
   <div id="chatMessages">
-    <div class="message" *ngFor="let message of messages">
+    <div class="message" *ngFor="let message of messages; let num = index">
+      <div *ngIf="num == 0">
+        <div class="interbar">{{ message.date }}</div>
+      </div>
+      <div *ngIf="num != 0">
+        <div class="interbar" *ngIf="message.date != messages[num-1].date">{{ message.date }}</div>
+      </div>
       <div *ngIf="!(message.receiver != currentUser.email && message.type == 'private') || message.sender == currentUser.email"
            [class]="message.sender == currentUser.email ? 'innerMessage messageRight' : 'innerMessage messageLeft'">
         <div class="mail">{{ message.sender }}
@@ -18,6 +24,7 @@
           <label *ngIf="message.sender == currentUser.email && message.type == 'private'"> (to {{ message.receiver }})</label>
         </div>
         <div class="message">{{ message.body }}</div>
+        <div class="msgtime">{{ message.hour }}</div>
       </div>
     </div>
   </div>

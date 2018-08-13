@@ -4,8 +4,6 @@ import {AngularFireDatabase} from "angularfire2/database";
 import * as firebase from "firebase";
 import {Variables} from "../../Variables";
 import {Notification} from "../../models/Notification";
-import {Observable} from "rxjs/Observable";
-import {map} from "rxjs/operators";
 
 /*
   Generated class for the ChatProvider provider.
@@ -34,12 +32,19 @@ export class ChatProvider {
       function(snapshot) {
 
         let index = snapshot.child('messages').numChildren();
+        let currentdate = new Date();
+        let locale = "en-us";
+        let currentmonth = currentdate.toLocaleString(locale, {month: "long"});
+        let date = currentdate.getDate() + " " + currentmonth  + " " + currentdate.getFullYear();
+        let hour = currentdate.getHours() + ":" + currentdate.getMinutes();
         //Prepare data to be stored
         let postData = {
           body: msgbody,
           sender: sender,
           type: type,
-          receiver: receiver
+          receiver: receiver,
+          date: date,
+          hour: hour
         };
         let updates = {};
         updates['/'+teaching_name+'/messages/'+ index] = postData;

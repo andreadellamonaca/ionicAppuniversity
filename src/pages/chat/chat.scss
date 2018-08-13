@@ -28,5 +28,17 @@ page-chat {
   .messageRight {
     float: right;
   }
+  .msgtime {
+    font-size: 10px;
+    text-align: right;
+  }
+  .interbar {
+    text-align: center;
+    font-size: 90%;
+    background: lightblue;
+    margin: auto;
+    width: 150px;
+    border-radius: 10px;
+  }
 
 }
