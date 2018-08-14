@@ -8,8 +8,8 @@ export interface Lecture {
   classroom?: Classroom;
   teaching?: Teaching;
   date?: Date;
-  hour?: string;
-  duration?: string;
+  starttime?: string;
+  endtime?: string;
   description?: string;
   tmaterials?: TeachingMaterial[];
   hide_material?: boolean;
