@@ -28,7 +28,6 @@ export class MyApp {
               public splashScreen: SplashScreen,
               public fcm: FcmProvider) {
 
-    localStorage.removeItem('currentUser');
     this.initializeApp();
     this.pages = [
       { title: 'Home', component: this.rootPage },
