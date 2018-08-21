@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Content, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Teaching} from "../../models/Teaching";
 import {ChatProvider} from "../../providers/chat/chat";
 import {User} from "../../models/User";
@@ -22,6 +22,7 @@ import * as firebase from "firebase";
   templateUrl: 'chat.html',
 })
 export class ChatPage {
+  @ViewChild('content') content: Content;
   currentUser: User;
   teaching: Teaching;
   msgbody: string = "";
@@ -54,6 +55,10 @@ export class ChatPage {
         }
       }
     })
+  }
+
+  goBottom() {
+    this.content.scrollToBottom(0);
   }
 
   sendMessage() {

@@ -9,40 +9,41 @@
 
 
 <ion-content padding>
-  <ion-item-group>
-    <ion-card *ngFor="let l of lectures">
-      <ion-item>{{ l.date }} Classroom: {{ l.classroom.name }}</ion-item>
-      <ion-item>Hour: {{ l.starttime }} - {{ l.endtime }}</ion-item>
-      <ion-item>Description: {{ l.description }}</ion-item>
-      <ion-item *ngIf="current.usertype.typeName == 'professor'">Average Rating: <rating class="ratingelem" [(ngModel)]="l.av_rating" readOnly="true" max="5" emptyStarIconName="star-outline" halfStarIconName="star-half"
-                starIconName="star" nullable="false"></rating>
-      </ion-item>
-      <ion-item *ngIf="l.hide_material">
-        <ion-list *ngFor="let tm of l.tmaterials">
-          <ion-item>
-            <ion-card>
-              <ion-card-content>
-                <a (click)="downloadMaterial(tm)">{{ tm.name }}</a>
-              </ion-card-content>
-              <ion-card-content *ngIf="current.usertype.typeName == 'professor'">
-                Average Rating: <rating class="ratingelem" [(ngModel)]="tm.av_rating" readOnly="true" max="5" emptyStarIconName="star-outline" halfStarIconName="star-half"
-                                        starIconName="star" nullable="false"></rating>
-              </ion-card-content>
-              <button ion-button (click)="showAllRatings(tm.idTeachingMaterial, 'material')" *ngIf="current.usertype.typeName == 'professor'" clear>Show material ratings!</button>
-              <button ion-button (click)="RateMaterial(tm)" *ngIf="current.usertype.typeName != 'professor'" clear>Rate the material!</button>
-            </ion-card>
-          </ion-item>
-        </ion-list>
-      </ion-item>
-      <ion-buttons end>
-        <button ion-button [block]="false" (click)="showMaterial(l)">Show teaching material!</button>
-      </ion-buttons>
-      <ion-buttons end>
-        <button ion-button [block]="false" (click)="RateLecture(l)" *ngIf="current.usertype.typeName != 'professor'">Rate the lecture!</button>
-        <button ion-button (click)="showAllRatings(l.idLecture, 'lecture')" *ngIf="current.usertype.typeName == 'professor'">Show lecture ratings!</button>
-      </ion-buttons>
-    </ion-card>
-    <h2 *ngIf="lectures.length == 0">There are no lectures!</h2>
-  </ion-item-group>
+  <ion-card *ngFor="let l of lectures">
+    <ion-item>
+      <p>Date: {{ l.date }}, {{ l.starttime }}-{{ l.endtime }}</p>
+      <p>Classroom: {{ l.classroom.name }}</p>
+      <p *ngIf="current.usertype.typeName == 'professor'">Average Rating: <rating class="ratingelem" [(ngModel)]="l.av_rating" readOnly="true"
+         max="5" emptyStarIconName="star-outline" halfStarIconName="star-half" starIconName="star" nullable="false"></rating></p>
+    </ion-item>
+    <ion-card-content>
+      <p>{{ l.description }}</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-start clear small (click)="showMaterial(l)">
+          <ion-icon name="attach"></ion-icon>
+          <div>Material</div>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-start clear small (click)="RateLecture(l)" *ngIf="current.usertype.typeName != 'professor'">
+          <ion-icon name="text"></ion-icon>
+          <div>Rate</div>
+        </button>
+        <button ion-button icon-start clear small (click)="showAllRatings(l.idLecture, 'lecture')" *ngIf="current.usertype.typeName == 'professor'">
+          <ion-icon name="text"></ion-icon>
+          <div>Ratings List</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <ion-note>
+          #{{ lectures.indexOf(l)+1 }}
+        </ion-note>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <h2 *ngIf="lectures.length == 0">There are no lectures!</h2>
 </ion-content>
 

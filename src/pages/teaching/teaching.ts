@@ -83,39 +83,8 @@ export class TeachingPage {
   }
 
   showMaterial(l: Lecture) {
-    this.tmProvider.getTeachingMaterialByIdLecture(l.idLecture).subscribe(data => {
-      l.tmaterials = data;
-      l.hide_material = !l.hide_material;
-      for (let i of l.tmaterials) {
-        this.msProvider.getAverageRatingByIdMaterial(i.idTeachingMaterial).subscribe(rate =>{
-          i.av_rating = rate;
-        });
-      }
-    });
-  }
-
-  RateMaterial(tm: TeachingMaterial) {
-    this.msProvider.getMaterialSatisfactionByIdUserAndIdMaterial(this.current.idUser, tm.idTeachingMaterial).subscribe(getrating => {
-      this.materialrating = getrating;
-      let modal = this.modalCtrl.create(MaterialRatingPage, {msat: this.materialrating, tmaterial: tm});
-      modal.present();
-    })
-  }
-
-  downloadMaterial(tm: TeachingMaterial) {
-    if (tm.type != "link") {
-      this.tmProvider.download(tm).subscribe((res: HttpResponse<Object>) => {
-        const contentType = res.headers.get('Content-Type');
-        const blob: Blob = new Blob([res.body], { type: contentType });
-        this.file.writeFile(cordova.file.externalRootDirectory + '/Download/', tm.name, blob, {replace: true})
-          .then((entry: FileEntry) => {
-            this.localnotif.schedule({
-              title: 'Downloaded ' + tm.name,
-              text: 'Download completed in Download folder.'
-            });
-          }).catch(err =>  this.showAlert("Error: " + err))
-      }, error => this.showAlert("Error: " + error));
-    }
+    let modal = this.modalCtrl.create(MaterialListPage, {lecture: l});
+    modal.present();
   }
 
   showAlert(message: string) {
@@ -374,6 +343,130 @@ export class RatingListPage {
 
   dismiss() {
     this.viewCtrl.dismiss();
+  }
+
+}
+
+@Component({
+  template: `
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Teaching Material list
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-undo" showWhen="android, windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card *ngFor="let tm of l.tmaterials">
+    <ion-item>
+      <h2>{{ tm.name }}</h2>
+      <p>{{ tm.type }}</p>
+      <p *ngIf="current.usertype.typeName == 'professor'">Average Rating: <rating class="ratingelem" [(ngModel)]="tm.av_rating" readOnly="true" 
+        max="5" emptyStarIconName="star-outline" halfStarIconName="star-half" starIconName="star" nullable="false"></rating></p>
+    </ion-item>
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-start clear small (click)="downloadMaterial(tm)">
+          <ion-icon name="download"></ion-icon>
+          <div>Download</div>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-start clear small (click)="RateMaterial(tm)" *ngIf="current.usertype.typeName != 'professor'">
+          <ion-icon name="text"></ion-icon>
+          <div>Rate</div>
+        </button>
+        <button ion-button icon-start clear small (click)="showAllRatings(tm.idTeachingMaterial, 'material')" *ngIf="current.usertype.typeName == 'professor'">
+        <ion-icon name="text"></ion-icon>
+        <div>Ratings List</div>
+      </button>
+      </ion-col>
+      <ion-col center text-center>
+        <ion-note>
+          #{{ l.tmaterials.indexOf(tm)+1 }}
+        </ion-note>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+</ion-content>
+`
+})
+export class MaterialListPage {
+  l: Lecture;
+  current: User;
+  materialrating: MaterialSatisfaction;
+
+  constructor(
+    public platform: Platform,
+    public params: NavParams,
+    public viewCtrl: ViewController,
+    public tmProvider: TeachingMaterialProvider,
+    public msProvider: MaterialSatisfactionProvider,
+    public alertctrl: AlertController,
+    public modalCtrl: ModalController,
+    public file: File,
+    public localnotif: LocalNotifications) {
+
+    this.l = this.params.get('lecture');
+    this.current = JSON.parse(localStorage.getItem('currentUser'));
+    this.tmProvider.getTeachingMaterialByIdLecture(this.l.idLecture).subscribe(data => {
+      this.l.tmaterials = data;
+      this.l.hide_material = !this.l.hide_material;
+      for (let i of this.l.tmaterials) {
+        this.msProvider.getAverageRatingByIdMaterial(i.idTeachingMaterial).subscribe(rate =>{
+          i.av_rating = rate;
+        });
+      }
+    });
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
+  RateMaterial(tm: TeachingMaterial) {
+    this.msProvider.getMaterialSatisfactionByIdUserAndIdMaterial(this.current.idUser, tm.idTeachingMaterial).subscribe(getrating => {
+      this.materialrating = getrating;
+      let modal = this.modalCtrl.create(MaterialRatingPage, {msat: this.materialrating, tmaterial: tm});
+      modal.present();
+    })
+  }
+
+  downloadMaterial(tm: TeachingMaterial) {
+    if (tm.type != "link") {
+      this.tmProvider.download(tm).subscribe((res: HttpResponse<Object>) => {
+        const contentType = res.headers.get('Content-Type');
+        const blob: Blob = new Blob([res.body], { type: contentType });
+        this.file.writeFile(cordova.file.externalRootDirectory + '/Download/', tm.name, blob, {replace: true})
+          .then((entry: FileEntry) => {
+            this.localnotif.schedule({
+              title: 'Downloaded ' + tm.name,
+              text: 'Download completed in Download folder.'
+            });
+          }).catch(err =>  this.showAlert("Error: " + err))
+      }, error => this.showAlert("Error: " + error));
+    }
+  }
+
+  showAlert(message: string) {
+    let alert = this.alertctrl.create({
+      title: 'Download Error!',
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+  showAllRatings(id: number, sattype: string) {
+    let modal = this.modalCtrl.create(RatingListPage, {idobject: id, type: sattype});
+    modal.present();
   }
 
 }

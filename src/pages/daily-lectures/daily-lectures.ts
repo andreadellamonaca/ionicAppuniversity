@@ -21,7 +21,8 @@ export class DailyLecturesPage {
 
   currentUser: User;
   currentdate = new Date();
-  date = this.currentdate.getFullYear() + "-" + (this.currentdate.getMonth()+1)  + "-" + this.currentdate.getDate();
+  date= "2018-07-14";
+  //date = this.currentdate.getFullYear() + "-" + (this.currentdate.getMonth()+1)  + "-" + this.currentdate.getDate();
   lectures: Lecture[] = [];
   show = false;
 

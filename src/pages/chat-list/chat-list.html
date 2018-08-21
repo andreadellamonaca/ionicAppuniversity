@@ -7,13 +7,13 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
-  <ion-item-group>
-    <ion-card *ngFor="let t of teachings">
-      <ion-item>{{ t.name }} ({{ t.cfu }})</ion-item>
-      <button ion-button [block]="false" (click)="openChat(t)">Go to chat!</button>
-    </ion-card>
-    <h2 *ngIf="teachings.length == 0">There are no teachings!</h2>
-  </ion-item-group>
+  <ion-list>
+    <ion-item *ngFor="let t of teachings">
+      <h4>{{ t.name }} ({{ t.cfu }})</h4>
+      <p>Prof. {{ t.user.name }} {{ t.user.surname }}</p>
+      <button ion-button (click)="openChat(t)" clear item-end>Open</button>
+    </ion-item>
+  </ion-list>
+  <h2 *ngIf="teachings.length == 0">There are no teachings!</h2>
 </ion-content>

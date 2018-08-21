@@ -25,7 +25,13 @@ import {Firebase} from "@ionic-native/firebase";
 import { FcmProvider } from '../providers/fcm/fcm';
 import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
 import {TeachingListPage} from "../pages/teaching-list/teaching-list";
-import {LectureRatingPage, MaterialRatingPage, RatingListPage, TeachingPage} from "../pages/teaching/teaching";
+import {
+  LectureRatingPage,
+  MaterialListPage,
+  MaterialRatingPage,
+  RatingListPage,
+  TeachingPage
+} from "../pages/teaching/teaching";
 import { LectureSatisfactionProvider } from '../providers/lecture-satisfaction/lecture-satisfaction';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import { TeachingMaterialProvider } from '../providers/teaching-material/teaching-material';
@@ -58,7 +64,8 @@ var config = {
     TeachingPage,
     LectureRatingPage,
     MaterialRatingPage,
-    RatingListPage
+    RatingListPage,
+    MaterialListPage
   ],
   imports: [
     BrowserModule,
@@ -83,7 +90,8 @@ var config = {
     TeachingPage,
     LectureRatingPage,
     MaterialRatingPage,
-    RatingListPage
+    RatingListPage,
+    MaterialListPage
   ],
   providers: [
     StatusBar,

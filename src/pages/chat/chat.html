@@ -8,9 +8,9 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content #content padding>
   <div id="chatMessages">
-    <div class="message" *ngFor="let message of messages; let num = index">
+    <div class="message" *ngFor="let message of messages; let num = index; let last = last">
       <div *ngIf="num == 0">
         <div class="interbar">{{ message.date }}</div>
       </div>
@@ -26,6 +26,7 @@
         <div class="message">{{ message.body }}</div>
         <div class="msgtime">{{ message.hour }}</div>
       </div>
+      {{ last ? goBottom() : '' }}
     </div>
   </div>
 

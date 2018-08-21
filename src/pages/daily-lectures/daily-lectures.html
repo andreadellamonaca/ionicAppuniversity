@@ -9,18 +9,30 @@
 
 
 <ion-content padding>
-  <ion-item-group>
-    <ion-card *ngFor="let l of lectures">
-      <br>
-      <h2>Teaching: {{ l.teaching.name }} ({{ l.teaching.cfu }})</h2>
-      <ion-item>Classroom: {{ l.classroom.name }}
-        <button ion-button [block]="false" (click)="showMap(l.classroom.latitude, l.classroom.longitude)">Show Map</button>
-        <ion-item *ngIf="show">
-          Qui vanno le mappe google
-        </ion-item>
-      </ion-item>
-      <ion-item>Hour: {{ l.starttime }} - {{ l.endtime }}</ion-item>
-    </ion-card>
-    <h2 *ngIf="lectures.length == 0">There are no lectures today!!! Are you happy? :)</h2>
-  </ion-item-group>
+  <ion-card *ngFor="let l of lectures">
+    <ion-item>
+      <h2>{{ l.teaching.name }} ({{ l.teaching.cfu }})</h2>
+      <p>Prof: {{l.teaching.user.name}} {{l.teaching.user.surname}}</p>
+      <p>Classroom: {{ l.classroom.name }}</p>
+      <p>Hour: {{ l.starttime }} - {{ l.endtime }}</p>
+    </ion-item>
+    <ion-card-content>
+      <p>{{ l.description }}</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-start clear small (click)="showMap(l.classroom.latitude, l.classroom.longitude)">
+          <ion-icon name="compass"></ion-icon>
+          <div>Show Map</div>
+        </button>
+      </ion-col>
+      <ion-col center text-center>
+        <ion-note>
+          #{{ lectures.indexOf(l)+1 }}
+        </ion-note>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <h2 *ngIf="lectures.length == 0">There are no lectures today!!! Are you happy? :)</h2>
 </ion-content>
