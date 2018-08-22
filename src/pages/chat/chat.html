@@ -36,6 +36,7 @@
   <ion-toolbar>
     <ion-item><ion-input type="text" [(ngModel)]="msgbody"></ion-input></ion-item>
     <ion-item>
+      <ion-label>Receiver: </ion-label>
       <ion-select [(ngModel)]="receiver">
         <ion-option *ngFor="let u of participants" value="{{ u.email }}">{{ u.email }}</ion-option>
         <ion-option value="public" [selected]="true">Public</ion-option>
