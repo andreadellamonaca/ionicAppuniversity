@@ -1,0 +1,35 @@
+<!--
+  Generated template for the ReportsListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Reports List</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card *ngFor="let r of rlist">
+    <ion-item>
+      <h2>{{ r.problemDescription }}</h2>
+      <p *ngIf="r.reportstatus.name != 'in pending'">Secr. {{ r.userBySecretaryIdSecretary.name }} {{ r.userBySecretaryIdSecretary.surname }}</p>
+      <p *ngIf="r.reportstatus.name == 'in pending'">none</p>
+      <p>Classroom: {{ r.classroom.name }}</p>
+      <p>Status: {{ r.reportstatus.name }}</p>
+      <p>Note: {{ r.note }}</p>
+    </ion-item>
+    <ion-row>
+      <ion-col center text-center>
+        <ion-note>
+          #{{ rlist.indexOf(r)+1 }}
+        </ion-note>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <h2 *ngIf="rlist.length == 0">There are no reports!</h2>
+</ion-content>

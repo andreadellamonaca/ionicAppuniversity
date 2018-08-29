@@ -1,5 +1,6 @@
 import {StudyCourse} from "./StudyCourse";
 import {UserType} from "./UserType";
+import {Teaching} from "./Teaching";
 
 
 export interface User {
@@ -11,4 +12,5 @@ export interface User {
   studycourse?: StudyCourse;
   surname?: string;
   usertype?: UserType;
+  teachings?: Teaching[];
 }

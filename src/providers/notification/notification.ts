@@ -29,6 +29,8 @@ export class NotificationProvider {
       head: 'New Rating on your lesson!',
       body: 'A student has evaluated the lesson: ' + lecture.date,
       token_topic: lecture.teaching.user.email,
+      type: 'LectureRate',
+      extra: JSON.stringify(lecture)
     };
     return this.http.post<Notification>(this.notificationurl +'/toUser', notification, {headers});
   }
@@ -38,6 +40,8 @@ export class NotificationProvider {
       head: 'New Rating on your material!',
       body: 'A student has evaluated the material: ' + tm.name,
       token_topic: tm.user.email,
+      type: 'MaterialRate',
+      extra: JSON.stringify(tm)
     };
     return this.http.post<Notification>(this.notificationurl +'/toUser', notification, {headers});
   }

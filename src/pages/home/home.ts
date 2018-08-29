@@ -4,6 +4,7 @@ import {UserProvider} from "../../providers/user/user";
 import {ProfessorPage} from "../professor/professor";
 import {StudentPage} from "../student/student";
 import {User} from "../../models/User";
+import {SignInPage} from "../sign-in/sign-in";
 
 @Component({
   selector: 'page-home',
@@ -45,6 +46,10 @@ export class HomePage {
     }, err =>{
       this.showAlert('Error! Your credentials are wrong!');
       console.log(err.message);});
+  }
+
+  SignIn() {
+    this.navCtrl.push(SignInPage);
   }
 
   showAlert(message: string) {

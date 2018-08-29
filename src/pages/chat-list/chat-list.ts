@@ -37,7 +37,7 @@ export class ChatListPage {
   }
 
   openChat(teaching: Teaching) {
-    this.navCtrl.setRoot(ChatPage, {Teaching: teaching})
+    this.navCtrl.setRoot(ChatPage, {Teaching: teaching});
   }
 
 }

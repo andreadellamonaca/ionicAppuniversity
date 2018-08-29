@@ -11,6 +11,7 @@ import {DailyLecturesPage} from "../pages/daily-lectures/daily-lectures";
 import {ChatListPage} from "../pages/chat-list/chat-list";
 import {FcmProvider} from "../providers/fcm/fcm";
 import {TeachingListPage} from "../pages/teaching-list/teaching-list";
+import {ExamListPage} from "../pages/exam-list/exam-list";
 
 @Component({
   templateUrl: 'app.html'
@@ -19,7 +20,7 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
-  currentUser: User;
+  currentUser: User = {};
 
   pages: Array<{title: string, component: any}>;
 
@@ -32,8 +33,9 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: this.rootPage },
       { title: 'Daily Lectures', component: DailyLecturesPage },
-      { title: 'Chat List', component: ChatListPage },
-      { title: 'Teaching List', component: TeachingListPage}
+      { title: 'Chats List', component: ChatListPage },
+      { title: 'Teachings List', component: TeachingListPage},
+      { title: 'Exams List', component: ExamListPage}
     ];
   }
 
@@ -60,7 +62,8 @@ export class MyApp {
         { title: 'Home', component: this.rootPage },
         { title: 'Daily Lectures', component: DailyLecturesPage },
         { title: 'Chats List', component: ChatListPage },
-        { title: 'Teachings List', component: TeachingListPage}
+        { title: 'Teachings List', component: TeachingListPage},
+        { title: 'Exams List', component: ExamListPage}
       ];
     }
     this.nav.setRoot(page.component);

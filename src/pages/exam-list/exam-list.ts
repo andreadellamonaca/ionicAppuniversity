@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
-import {LectureProvider} from "../../providers/lecture/lecture";
 import {User} from "../../models/User";
-import {Lecture} from "../../models/Lecture";
+import {Exam} from "../../models/Exam";
 import {
   GoogleMaps,
   GoogleMap,
@@ -12,45 +11,51 @@ import {
   MarkerOptions,
   Marker
 } from '@ionic-native/google-maps';
+import {TeachingProvider} from "../../providers/teaching/teaching";
+import {Teaching} from "../../models/Teaching";
+import {ExamProvider} from "../../providers/exam/exam";
 
 /**
- * Generated class for the DailyLecturesPage page.
+ * Generated class for the ExamListPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
 
-
 @IonicPage()
 @Component({
-  selector: 'page-daily-lectures',
-  templateUrl: 'daily-lectures.html',
+  selector: 'page-exam-list',
+  templateUrl: 'exam-list.html',
 })
-export class DailyLecturesPage {
+export class ExamListPage {
 
   currentUser: User;
-  currentdate = new Date();
-  date= "2018-07-14";
-  //date = this.currentdate.getFullYear() + "-" + (this.currentdate.getMonth()+1)  + "-" + this.currentdate.getDate();
-  lectures: Lecture[] = [];
+  tlist: Teaching[];
+  examslist: Exam[] = [];
   show: boolean = false;
   map: GoogleMap;
+  currentdate = new Date();
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public lectureProvider: LectureProvider,
-              public platform: Platform) {
-
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public platform: Platform, public teachingProvider: TeachingProvider, public examProvider: ExamProvider) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.lectureProvider.getDailyLecturesByDate_IdUser(this.date, this.currentUser).subscribe(data => {
-      console.log(data);
-      this.lectures = data;
+    this.teachingProvider.getTeachingsByIdUser(this.currentUser).subscribe(list =>{
+      this.tlist = list;
+      for (let i of this.tlist) {
+        this.examProvider.getExamsByIdTeaching(i.idTeaching).subscribe(elist => {
+          for (const i of elist) {
+            if (i.date.getTime() >= this.currentdate.getTime()) {
+              this.examslist.push(i);
+            }
+          }
+          this.examslist.sort((a,b) => a.date <= b.date ? -1 : 1 );
+        });
+      }
     });
-
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad DailyLecturesPage');
+    console.log('ionViewDidLoad ExamListPage');
   }
 
   showMap(latitude: number, longitude: number) {

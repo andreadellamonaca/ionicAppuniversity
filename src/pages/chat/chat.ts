@@ -70,7 +70,7 @@ export class ChatPage {
     }
     console.log('RECEIVER:' +this.receiver);
     console.log('TYPE:' + type);
-    this.chatProvider.saveMessage(this.teaching.name, this.msgbody, this.currentUser.email, type, this.receiver);
+    this.chatProvider.saveMessage(this.teaching, this.msgbody, this.currentUser.email, type, this.receiver);
     this.msgbody = "";
   }
 

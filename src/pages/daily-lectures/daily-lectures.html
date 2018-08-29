@@ -17,9 +17,10 @@
       <p>Hour: {{ l.starttime }} - {{ l.endtime }}</p>
     </ion-item>
     <ion-card-content>
-      <p>{{ l.description }}</p>
+      <div *ngIf="show">
+        <img id="map_canvas" />
+      </div>
     </ion-card-content>
-
     <ion-row>
       <ion-col>
         <button ion-button icon-start clear small (click)="showMap(l.classroom.latitude, l.classroom.longitude)">

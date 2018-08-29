@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Exams List</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngFor="let e of examslist; let num = index;">
+    <div class="interbar" *ngIf="num == 0">{{ e.date }}</div>
+    <div *ngIf="num != 0">
+      <div class="interbar" *ngIf="e.date != examslist[num-1].date"><h1>{{ e.date }}</h1></div>
+    </div>
+    <ion-card>
+      <ion-item>
+        <h2>{{ e.teaching.name }} ({{ e.teaching.cfu }})</h2>
+        <p>Prof. {{ e.teaching.user.name }} {{ e.teaching.user.surname }}</p>
+        <p>Hour: {{ e.hour }}</p>
+        <p>Classroom: {{ e.classroom.name }}</p>
+      </ion-item>
+      <ion-card-content>
+        <div *ngIf="show">
+          <img id="map_canvas" />
+        </div>
+      </ion-card-content>
+      <ion-row>
+        <ion-col>
+          <button ion-button icon-start clear small (click)="showMap(e.classroom.latitude, e.classroom.longitude)">
+            <ion-icon name="compass"></ion-icon>
+            <div>Show Map</div>
+          </button>
+        </ion-col>
+        <ion-col center text-center>
+          <ion-note>
+            #{{ examslist.indexOf(e)+1 }}
+          </ion-note>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+  <h2 *ngIf="examslist.length == 0">There are no exams!!!</h2>
+</ion-content>

@@ -1,5 +1,5 @@
 export interface UserType {
 
-  idUserType: number;
-  typeName: string;
+  idUserType?: number;
+  typeName?: string;
 }

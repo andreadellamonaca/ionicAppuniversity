@@ -28,5 +28,9 @@ export class TeachingProvider {
     }
   }
 
+  getTeachingsByIdStudyCourse(idstudycourse: number): Observable<Teaching[]> {
+    return this.http.get<Teaching[]>(this.teachingurl + '/getTeachingByStudyCourse/' + idstudycourse);
+  }
+
 
 }

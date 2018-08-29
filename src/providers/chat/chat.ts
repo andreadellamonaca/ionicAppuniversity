@@ -4,6 +4,7 @@ import {AngularFireDatabase} from "angularfire2/database";
 import * as firebase from "firebase";
 import {Variables} from "../../Variables";
 import {Notification} from "../../models/Notification";
+import {Teaching} from "../../models/Teaching";
 
 /*
   Generated class for the ChatProvider provider.
@@ -24,11 +25,11 @@ export class ChatProvider {
     console.log('Hello ChatProvider Provider');
   }
 
-  saveMessage(teaching_name: string, msgbody: string, sender: string, type: string, receiver: string) {
+  saveMessage(teaching: Teaching, msgbody: string, sender: string, type: string, receiver: string) {
     //Take index of messages
     let protocol = this.http;
     let url = this.notificationurl;
-    firebase.database().ref('/'+teaching_name+'/').once('value',
+    firebase.database().ref('/'+teaching.name+'/').once('value',
       function(snapshot) {
 
         let index = snapshot.child('messages').numChildren();
@@ -47,15 +48,17 @@ export class ChatProvider {
           hour: hour
         };
         let updates = {};
-        updates['/'+teaching_name+'/messages/'+ index] = postData;
+        updates['/'+teaching.name+'/messages/'+ index] = postData;
         firebase.database().ref().update(updates);
         //Call backend to send push notification
         if ( type == 'private') {
           console.log('Creo notifica privata');
           let notification: Notification = {
-            head: teaching_name + ' [Private]',
+            head: teaching.name + ' [Private]',
             body: sender + ': ' + msgbody,
             token_topic: receiver,
+            type: 'Chat',
+            extra: JSON.stringify(teaching)
           };
           console.log(notification);
           protocol.post<Notification>(url +'/toUser', notification, {headers}).subscribe(data => {
@@ -65,9 +68,11 @@ export class ChatProvider {
         if ( type == 'public') {
           console.log('Creo notifica pubblica');
           let notification: Notification = {
-            head: teaching_name,
+            head: teaching.name,
             body: sender + ': ' + msgbody,
-            token_topic: teaching_name,
+            token_topic: teaching.name,
+            type: 'Chat',
+            extra: JSON.stringify(teaching)
           };
           console.log(notification);
           protocol.post<Notification>(url +'/toTopic', notification, {headers}).subscribe(data => {

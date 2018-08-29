@@ -4,6 +4,8 @@ import {User} from "../../models/User";
 import {FcmProvider} from "../../providers/fcm/fcm";
 import {tap} from "rxjs/operators";
 import {TeachingProvider} from "../../providers/teaching/teaching";
+import {ReportsListPage} from "../reports-list/reports-list";
+import {NotificationManager} from "../../NotificationManager";
 
 /**
  * Generated class for the ProfessorPage page.
@@ -20,6 +22,7 @@ import {TeachingProvider} from "../../providers/teaching/teaching";
 export class ProfessorPage {
 
   current: User = {};
+  notifManager: NotificationManager;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -28,6 +31,7 @@ export class ProfessorPage {
               public toastCtrl: ToastController,
               public teachingProvider: TeachingProvider) {
     this.current = JSON.parse(localStorage.getItem('currentUser'));
+    this.notifManager = new NotificationManager(this.platform,this.navCtrl);
 
   }
 
@@ -45,7 +49,9 @@ export class ProfessorPage {
           });
           toast.present();
         })
-      ).subscribe();
+      ).subscribe(data => {
+        this.notifManager.handle(data);
+      });
       //Listen to topics (its teachings)
       this.teachingProvider.getTeachingsByIdUser(this.current).subscribe(teachingslist => {
         for (let i of teachingslist) {
@@ -62,6 +68,10 @@ export class ProfessorPage {
         }
       })
     }
+  }
+
+  gotoreports() {
+    this.navCtrl.push(ReportsListPage);
   }
 
 }

@@ -22,4 +22,8 @@
     <ion-item>Your Email: <p>{{ current.email }}</p></ion-item>
     <ion-item>Your Role: <p>{{ current.usertype.typeName }}</p></ion-item>
   </ion-item-group>
+  <button ion-button icon-start (click)="gotoreports()">
+    <ion-icon name="clipboard"></ion-icon>
+    Your Reports
+  </button>
 </ion-content>

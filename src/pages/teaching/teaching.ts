@@ -22,6 +22,7 @@ import {File, FileEntry} from '@ionic-native/file';
 import {HttpResponse} from "@angular/common/http";
 import {LocalNotifications} from "@ionic-native/local-notifications";
 import {NotificationProvider} from "../../providers/notification/notification";
+import {InAppBrowser} from "@ionic-native/in-app-browser";
 
 declare var cordova: any;
 
@@ -41,19 +42,14 @@ export class TeachingPage {
   current: User;
   teaching: Teaching;
   lectures: Lecture[] = [];
-  rating: LectureSatisfaction;
-  materialrating: MaterialSatisfaction;
+  rating: LectureSatisfaction = {};
 
   constructor(public navParams: NavParams,
               public lectureProvider: LectureProvider,
               public lsProvider: LectureSatisfactionProvider,
               public modalCtrl: ModalController,
-              public tmProvider: TeachingMaterialProvider,
-              public msProvider: MaterialSatisfactionProvider,
               public file: File,
-              public alertctrl: AlertController,
-              public localnotif: LocalNotifications,
-              public toastCtrl: ToastController) {
+              public alertctrl: AlertController) {
 
     this.teaching = this.navParams.get('Teaching');
 
@@ -79,21 +75,15 @@ export class TeachingPage {
       this.rating = getrating;
       let modal = this.modalCtrl.create(LectureRatingPage, {sat: this.rating, lecture: l});
       modal.present();
+    },error1 => {
+      let modal = this.modalCtrl.create(LectureRatingPage, {sat: null, lecture: l});
+      modal.present();
     });
   }
 
   showMaterial(l: Lecture) {
     let modal = this.modalCtrl.create(MaterialListPage, {lecture: l});
     modal.present();
-  }
-
-  showAlert(message: string) {
-    let alert = this.alertctrl.create({
-      title: 'Download Error!',
-      subTitle: message,
-      buttons: ['OK']
-    });
-    alert.present();
   }
 
   showAllRatings(id: number, sattype: string) {
@@ -126,7 +116,7 @@ export class TeachingPage {
       <rating class="ratingelem" [(ngModel)]="rate" readOnly="false" max="5" emptyStarIconName="star-outline" halfStarIconName="star-half"
       starIconName="star" nullable="false"></rating>
     </ion-item>
-    <button class="confirmbtn" ion-button [disabled]="ratingnote == ''" (click)="saveRating()" round>Confirm rating!</button>
+    <button class="confirmbtn" ion-button [disabled]="ratingnote == '' || ratingnote == null" (click)="saveRating()" round>Confirm rating!</button>
   </ion-card>
 </ion-content>
 `
@@ -372,9 +362,13 @@ export class RatingListPage {
     </ion-item>
     <ion-row>
       <ion-col>
-        <button ion-button icon-start clear small (click)="downloadMaterial(tm)">
+        <button ion-button icon-start clear small *ngIf="tm.type != 'link'" (click)="downloadMaterial(tm)">
           <ion-icon name="download"></ion-icon>
           <div>Download</div>
+        </button>
+        <button ion-button icon-start clear small *ngIf="tm.type == 'link'" (click)="openLink(tm)">
+          <ion-icon name="open"></ion-icon>
+          <div>Open</div>
         </button>
       </ion-col>
       <ion-col>
@@ -412,7 +406,8 @@ export class MaterialListPage {
     public alertctrl: AlertController,
     public modalCtrl: ModalController,
     public file: File,
-    public localnotif: LocalNotifications) {
+    public localnotif: LocalNotifications,
+    private iab: InAppBrowser) {
 
     this.l = this.params.get('lecture');
     this.current = JSON.parse(localStorage.getItem('currentUser'));
@@ -436,6 +431,9 @@ export class MaterialListPage {
       this.materialrating = getrating;
       let modal = this.modalCtrl.create(MaterialRatingPage, {msat: this.materialrating, tmaterial: tm});
       modal.present();
+    },error1 => {
+      let modal = this.modalCtrl.create(MaterialRatingPage, {msat: null, tmaterial: tm});
+      modal.present();
     })
   }
 
@@ -453,6 +451,11 @@ export class MaterialListPage {
           }).catch(err =>  this.showAlert("Error: " + err))
       }, error => this.showAlert("Error: " + error));
     }
+  }
+
+  openLink(tm: TeachingMaterial) {
+    const browser = this.iab.create(tm.link);
+    browser.show();
   }
 
   showAlert(message: string) {
