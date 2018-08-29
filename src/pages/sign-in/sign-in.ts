@@ -70,6 +70,7 @@ export class SignInPage {
     this.usermodel.surname = this.surname.value;
     this.usermodel.email = this.email.value;
     this.usermodel.password = this.password.value;
+    this.usermodel.courseYear = 1;
     let sc: StudyCourse = {idStudyCourse: this.selectedsc};
     this.usermodel.studycourse = sc;
     let ut: UserType = {idUserType: 1, typeName: 'student'};

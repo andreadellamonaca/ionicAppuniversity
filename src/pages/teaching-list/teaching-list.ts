@@ -26,7 +26,15 @@ export class TeachingListPage {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     this.teachingProvider.getTeachingsByIdUser(this.currentUser).subscribe(teachingslist => {
-      this.teachings = teachingslist;
+      if (this.currentUser.usertype.typeName == 'student') {
+        for (const i of teachingslist) {
+          if (i.courseYear <= this.currentUser.courseYear) {
+            this.teachings.push(i);
+          }
+        }
+      } else {
+        this.teachings = teachingslist;
+      }
     })
   }
 

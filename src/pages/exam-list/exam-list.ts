@@ -14,6 +14,7 @@ import {
 import {TeachingProvider} from "../../providers/teaching/teaching";
 import {Teaching} from "../../models/Teaching";
 import {ExamProvider} from "../../providers/exam/exam";
+import {D} from "@angular/core/src/render3";
 
 /**
  * Generated class for the ExamListPage page.
@@ -30,7 +31,7 @@ import {ExamProvider} from "../../providers/exam/exam";
 export class ExamListPage {
 
   currentUser: User;
-  tlist: Teaching[];
+  tlist: Teaching[] = [];
   examslist: Exam[] = [];
   show: boolean = false;
   map: GoogleMap;
@@ -39,13 +40,23 @@ export class ExamListPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
               public platform: Platform, public teachingProvider: TeachingProvider, public examProvider: ExamProvider) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.teachingProvider.getTeachingsByIdUser(this.currentUser).subscribe(list =>{
-      this.tlist = list;
+    this.teachingProvider.getTeachingsByIdUser(this.currentUser).subscribe(list => {
+      if (this.currentUser.usertype.typeName == 'student') {
+        for (const i of list) {
+          if (i.courseYear <= this.currentUser.courseYear) {
+            this.tlist.push(i);
+          }
+        }
+      } else {
+        this.tlist = list;
+      }
       for (let i of this.tlist) {
         this.examProvider.getExamsByIdTeaching(i.idTeaching).subscribe(elist => {
-          for (const i of elist) {
-            if (i.date.getTime() >= this.currentdate.getTime()) {
-              this.examslist.push(i);
+          console.log(elist);
+          for (const j of elist) {
+            const data = new Date(j.date);
+            if (data.getTime() >= this.currentdate.getTime()) {
+              this.examslist.push(j);
             }
           }
           this.examslist.sort((a,b) => a.date <= b.date ? -1 : 1 );

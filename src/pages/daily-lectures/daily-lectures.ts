@@ -44,7 +44,15 @@ export class DailyLecturesPage {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.lectureProvider.getDailyLecturesByDate_IdUser(this.date, this.currentUser).subscribe(data => {
       console.log(data);
-      this.lectures = data;
+      if (this.currentUser.usertype.typeName == 'student') {
+        for (const i of data) {
+          if (i.teaching.courseYear <= this.currentUser.courseYear) {
+            this.lectures.push(i);
+          }
+        }
+      } else {
+        this.lectures = data;
+      }
     });
 
   }
