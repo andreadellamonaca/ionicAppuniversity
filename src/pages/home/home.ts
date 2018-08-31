@@ -4,7 +4,7 @@ import {UserProvider} from "../../providers/user/user";
 import {ProfessorPage} from "../professor/professor";
 import {StudentPage} from "../student/student";
 import {User} from "../../models/User";
-import {SignInPage} from "../sign-in/sign-in";
+import {SignUpPage} from "../sign-up/sign-up";
 
 @Component({
   selector: 'page-home',
@@ -48,8 +48,8 @@ export class HomePage {
       console.log(err.message);});
   }
 
-  SignIn() {
-    this.navCtrl.push(SignInPage);
+  SignUp() {
+    this.navCtrl.push(SignUpPage);
   }
 
   showAlert(message: string) {

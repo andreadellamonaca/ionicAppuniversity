@@ -10,7 +10,7 @@ import {Teaching} from "../../models/Teaching";
 import {HomePage} from "../home/home";
 
 /**
- * Generated class for the SignInPage page.
+ * Generated class for the SignUpPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -18,10 +18,10 @@ import {HomePage} from "../home/home";
 
 @IonicPage()
 @Component({
-  selector: 'page-sign-in',
-  templateUrl: 'sign-in.html',
+  selector: 'page-sign-up',
+  templateUrl: 'sign-up.html',
 })
-export class SignInPage {
+export class SignUpPage {
   sclist: StudyCourse[] = [];
   selectedsc: number;
   @ViewChild('email') email;
@@ -40,7 +40,7 @@ export class SignInPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SignInPage');
+    console.log('ionViewDidLoad SignUpPage');
   }
 
   showConfirm() {
@@ -66,27 +66,32 @@ export class SignInPage {
   }
 
   register() {
-    this.usermodel.name = this.name.value;
-    this.usermodel.surname = this.surname.value;
-    this.usermodel.email = this.email.value;
-    this.usermodel.password = this.password.value;
-    this.usermodel.courseYear = 1;
-    let sc: StudyCourse = {idStudyCourse: this.selectedsc};
-    this.usermodel.studycourse = sc;
-    let ut: UserType = {idUserType: 1, typeName: 'student'};
-    this.usermodel.usertype = ut;
-    this.userService.save(this.usermodel).subscribe(data => {
-      console.log(data);
-      this.usermodel = data;
-      this.teachingService.getTeachingsByIdStudyCourse(this.selectedsc).subscribe(list => {
-        console.log(list);
-        this.usermodel.teachings = list;
-        this.userService.subscribetoteaching(this.usermodel).subscribe(data => {
-          console.log(data);
-          this.navCtrl.setRoot(HomePage);
-        });
-      })
-    },error1 => {this.showAlert('Error! Email already used!')});
+    console.log('registro');
+    if (/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/.test(this.email.value)) {
+      this.usermodel.name = this.name.value;
+      this.usermodel.surname = this.surname.value;
+      this.usermodel.email = this.email.value;
+      this.usermodel.password = this.password.value;
+      this.usermodel.courseYear = 1;
+      let sc: StudyCourse = {idStudyCourse: this.selectedsc};
+      this.usermodel.studycourse = sc;
+      let ut: UserType = {idUserType: 1, typeName: 'student'};
+      this.usermodel.usertype = ut;
+      this.userService.save(this.usermodel).subscribe(data => {
+        console.log(data);
+        this.usermodel = data;
+        this.teachingService.getTeachingsByIdStudyCourse(this.selectedsc).subscribe(list => {
+          console.log(list);
+          this.usermodel.teachings = list;
+          this.userService.subscribetoteaching(this.usermodel).subscribe(data => {
+            console.log(data);
+            this.navCtrl.setRoot(HomePage);
+          });
+        })
+      },error1 => {this.showAlert('Error! Email already used or form is not completed!')});
+    } else {
+      this.showAlert('Error! Bad email!');
+    }
   }
 
   showAlert(message: string) {

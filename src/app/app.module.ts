@@ -40,7 +40,7 @@ import {FileTransfer} from "@ionic-native/file-transfer";
 import {File} from "@ionic-native/file";
 import {LocalNotifications} from "@ionic-native/local-notifications";
 import { NotificationProvider } from '../providers/notification/notification';
-import {SignInPage} from "../pages/sign-in/sign-in";
+import {SignUpPage} from "../pages/sign-up/sign-up";
 import { StudycourseProvider } from '../providers/studycourse/studycourse';
 import {ReportsListPage} from "../pages/reports-list/reports-list";
 import { ReportProvider } from '../providers/report/report';
@@ -73,7 +73,7 @@ var config = {
     MaterialRatingPage,
     RatingListPage,
     MaterialListPage,
-    SignInPage,
+    SignUpPage,
     ReportsListPage,
     ExamListPage
   ],
@@ -102,7 +102,7 @@ var config = {
     MaterialRatingPage,
     RatingListPage,
     MaterialListPage,
-    SignInPage,
+    SignUpPage,
     ReportsListPage,
     ExamListPage
   ],

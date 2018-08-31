@@ -5,16 +5,12 @@ import {Exam} from "../../models/Exam";
 import {
   GoogleMaps,
   GoogleMap,
-  GoogleMapsEvent,
   GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
   Marker
 } from '@ionic-native/google-maps';
 import {TeachingProvider} from "../../providers/teaching/teaching";
 import {Teaching} from "../../models/Teaching";
 import {ExamProvider} from "../../providers/exam/exam";
-import {D} from "@angular/core/src/render3";
 
 /**
  * Generated class for the ExamListPage page.
