@@ -48,7 +48,7 @@ export class ChatPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ChatPage');
-    this.userProvider.getUsersByTeachingName(this.teaching.name).subscribe(list => {
+    this.userProvider.getUsersByIdTeaching(this.teaching.idTeaching).subscribe(list => {
       for (let i of list) {
         if (i.idUser != this.currentUser.idUser) {
           this.participants.push(i);

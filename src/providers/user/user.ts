@@ -25,8 +25,8 @@ export class UserProvider {
     return this.http.get<User>(this.loginurl + '/' + mail + '/' + password);
   }
 
-  getUsersByTeachingName(teaching_name: string): Observable<User[]> {
-    return this.http.get<User[]>(this.userurl + 'getUsersByTeachingName/' + teaching_name);
+  getUsersByIdTeaching(idteaching: number): Observable<User[]> {
+    return this.http.get<User[]>(this.userurl + 'getUsersByidTeaching/' + idteaching);
   }
 
   save(u: User): Observable<User> {
