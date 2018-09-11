@@ -405,6 +405,7 @@ export class MaterialListPage {
     public msProvider: MaterialSatisfactionProvider,
     public alertctrl: AlertController,
     public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
     public file: File,
     public localnotif: LocalNotifications,
     private iab: InAppBrowser) {
@@ -444,10 +445,15 @@ export class MaterialListPage {
         const blob: Blob = new Blob([res.body], { type: contentType });
         this.file.writeFile(cordova.file.externalRootDirectory + '/Download/', tm.name, blob, {replace: true})
           .then((entry: FileEntry) => {
-            this.localnotif.schedule({
+            const toast = this.toastCtrl.create({
+              message: 'Download completed in Download folder',
+              duration: 7000
+            });
+            toast.present();
+            /*this.localnotif.schedule({
               title: 'Downloaded ' + tm.name,
               text: 'Download completed in Download folder.'
-            });
+            });*/
           }).catch(err =>  this.showAlert("Error: " + err))
       }, error => this.showAlert("Error: " + error));
     }

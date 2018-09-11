@@ -55,7 +55,7 @@ export class ProfessorPage {
       //Listen to topics (its teachings)
       this.teachingProvider.getTeachingsByIdUser(this.current).subscribe(teachingslist => {
         for (let i of teachingslist) {
-          this.fcm.subscribeToTopic(i.name.replace(' ', '_')).pipe(
+          this.fcm.subscribeToTopic(i.name.replace(/ /g, '_')).pipe(
             tap(msg => {
               // show a toast
               const toast = this.toastCtrl.create({

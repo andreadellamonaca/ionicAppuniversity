@@ -65,17 +65,17 @@ export class ExamListPage {
     console.log('ionViewDidLoad ExamListPage');
   }
 
-  showMap(latitude: number, longitude: number) {
+  showMap(latitude: number, longitude: number, name: string) {
     this.show = !this.show;
     console.log(latitude + ' ' + longitude);
     if (this.show == true) {
       this.platform.ready().then(() => {
-        this.loadMap(latitude, longitude);
+        this.loadMap(latitude, longitude, name);
       });
     }
   }
 
-  loadMap(latitude: number, longitude: number) {
+  loadMap(latitude: number, longitude: number, name: string) {
     let mapOptions: GoogleMapOptions = {
       camera: {
         target: {
@@ -90,7 +90,7 @@ export class ExamListPage {
     this.map = GoogleMaps.create('map_canvas', mapOptions);
 
     let marker: Marker = this.map.addMarkerSync({
-      title: 'Ionic',
+      title: name,
       icon: 'blue',
       animation: 'DROP',
       position: {

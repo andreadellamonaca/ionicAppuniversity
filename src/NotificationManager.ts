@@ -15,6 +15,7 @@ export class NotificationManager {
 
   public handle(msg: any) {
     this.platform.ready().then(() => {
+      
       if (msg.type == 'Chat') {
         let t: Teaching = JSON.parse(msg.extra);
         this.navCtrl.push(ChatPage, {Teaching: t});
