@@ -362,11 +362,11 @@ export class RatingListPage {
     </ion-item>
     <ion-row>
       <ion-col>
-        <button ion-button icon-start clear small *ngIf="tm.type != 'link'" (click)="downloadMaterial(tm)">
+        <button ion-button icon-start clear small *ngIf="tm.type != 'link' && tm.type != 'Link'" (click)="downloadMaterial(tm)">
           <ion-icon name="download"></ion-icon>
           <div>Download</div>
         </button>
-        <button ion-button icon-start clear small *ngIf="tm.type == 'link'" (click)="openLink(tm)">
+        <button ion-button icon-start clear small *ngIf="tm.type == 'link' || tm.type == 'Link'" (click)="openLink(tm)">
           <ion-icon name="open"></ion-icon>
           <div>Open</div>
         </button>
